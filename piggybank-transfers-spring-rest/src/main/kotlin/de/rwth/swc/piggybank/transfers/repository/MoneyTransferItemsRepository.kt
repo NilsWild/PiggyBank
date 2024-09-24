@@ -51,7 +51,7 @@ class MoneyTransferItemsRepository(
      * @param item The MoneyTransferItem to save.
      */
     override fun save(item: MoneyTransferItem) {
-        TODO("Not yet implemented")
+        repo.save(mapper.toPersistence(item))
     }
 
     /**
@@ -70,7 +70,9 @@ class MoneyTransferItemsRepository(
      * @return A collection of MoneyTransferItems received from the source account.
      */
     override fun getAllReceivedFromSource(source: Account): Collection<MoneyTransferItem> {
-        TODO("Not yet implemented")
+        return repo.findBySourceTypeAndSourceIdentifier(source.type.value, source.identifier.value).map {
+            mapper.toDomain(it)
+        }
     }
 
     /**
@@ -80,6 +82,8 @@ class MoneyTransferItemsRepository(
      * @return A collection of MoneyTransferItems transferred to the target account.
      */
     override fun getAllTransferredToTarget(target: Account): Collection<MoneyTransferItem> {
-        TODO("Not yet implemented")
+        return repo.findByTargetTypeAndTargetIdentifier(target.type.value, target.identifier.value).map {
+            mapper.toDomain(it)
+        }
     }
 }

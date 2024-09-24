@@ -28,6 +28,28 @@ data class Currency(
         fun from(name: String, symbol: String, decimalPlaces: Int): Currency {
             return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces))
         }
+
+        fun from(id: String): Currency {
+            return when (id) {
+                "EUR" -> EUR
+                "USD" -> USD
+                "GBP" -> GBP
+                else -> {
+                    throw IllegalArgumentException("Invalid currency id: $id")
+                }
+            }
+        }
+    }
+
+    fun to(): String {
+        return when (name.value) {
+            "Euro" -> "EUR"
+            "US Dollar" -> "USD"
+            "British Pound" -> "GBP"
+            else -> {
+                throw IllegalArgumentException("Invalid currency name: $name")
+            }
+        }
     }
 }
 
