@@ -6,15 +6,23 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
 
-
+/**
+ * Configuration class for setting up the AccountTwinClient.
+ */
 @Configuration
-class AccountTwinClient {
+class AccountTwinClientConfiguration {
 
+    /**
+     * Creates a bean for the AccountTwinService client.
+     *
+     * @param loadBalancedWebClientBuilder The WebClient.Builder with load balancing capabilities.
+     * @return An instance of AccountTwinService.
+     */
     @Bean
     fun accountTwinClient(loadBalancedWebClientBuilder: WebClient.Builder): AccountTwinService {
         val httpServiceProxyFactory = HttpServiceProxyFactory
-            .builder(
-                WebClientAdapter.forClient(
+            .builderFor(
+                WebClientAdapter.create(
                     loadBalancedWebClientBuilder
                         .baseUrl("http://piggybank-accounttwin-spring-rest")
                         .build()

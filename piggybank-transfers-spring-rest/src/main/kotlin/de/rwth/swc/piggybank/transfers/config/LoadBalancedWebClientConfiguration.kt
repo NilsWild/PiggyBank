@@ -1,8 +1,6 @@
 package de.rwth.swc.piggybank.transfers.config
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced
-import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient
-import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClients
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
@@ -11,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient
  * Configuration class for setting up load balancing for WebClients.
  */
 @Configuration
-class LoadBalancerConfiguration {
+class LoadBalancedWebClientConfiguration {
 
     /**
      * Creates a WebClient.Builder bean with load balancing capabilities.

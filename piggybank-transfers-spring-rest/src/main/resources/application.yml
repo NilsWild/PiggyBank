@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: piggybank-transfers-spring-rest
+
+server:
+  port: 8090

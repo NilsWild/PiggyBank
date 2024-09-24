@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.shared
+package de.rwth.swc.piggybank.domain.shared.valueobject
 
 /**
  * Represents a currency with a name, symbol, and the number of decimal places.
@@ -37,7 +37,15 @@ data class Currency(
  * @property value The name of the currency.
  */
 @JvmInline
-value class CurrencyName(val value: String)
+value class CurrencyName(val value: String) {
+    init {
+        require(value.isNotBlank()) { "Currency name must not be blank" }
+    }
+
+    override fun toString(): String {
+        return value
+    }
+}
 
 /**
  * Inline value class for the currency symbol.
@@ -45,7 +53,15 @@ value class CurrencyName(val value: String)
  * @property value The symbol of the currency.
  */
 @JvmInline
-value class CurrencySymbol(val value: String)
+value class CurrencySymbol(val value: String) {
+    init {
+        require(value.isNotBlank()) { "Currency symbol must not be blank" }
+    }
+
+    override fun toString(): String {
+        return value
+    }
+}
 
 /**
  * Inline value class for the number of decimal places.
@@ -53,4 +69,12 @@ value class CurrencySymbol(val value: String)
  * @property value The number of decimal places used with the currency.
  */
 @JvmInline
-value class DecimalPlaces(val value: Int)
+value class DecimalPlaces(val value: Int) {
+    init {
+        require(value >= 0) { "Decimal places must be greater than or equal to 0" }
+    }
+
+    override fun toString(): String {
+        return value.toString()
+    }
+}
