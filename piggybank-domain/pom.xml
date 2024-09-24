@@ -34,6 +34,10 @@
             <groupId>org.instancio</groupId>
             <artifactId>instancio-junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
