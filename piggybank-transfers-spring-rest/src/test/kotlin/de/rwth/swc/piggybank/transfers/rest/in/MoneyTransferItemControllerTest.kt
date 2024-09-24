@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.rwth.swc.piggybank.domain.shared.valueobject.*
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
+import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
 import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
 import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
 import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockserver.integration.ClientAndServer
@@ -33,6 +35,9 @@ class MoneyTransferItemControllerTest {
     @Autowired
     lateinit var mockServer: ClientAndServer
 
+    @Autowired
+    lateinit var moneyTransferItems: MoneyTransferItems
+
     @BeforeEach
     fun startMockServer() {
         mockServer.reset()
@@ -43,7 +48,7 @@ class MoneyTransferItemControllerTest {
         mockServer.`when`(
             HttpRequest.request()
                 .withMethod("POST")
-                .withPath("/api/accounts/SAVINGS/987654321/addMoney")
+                .withPath("/api/accounts/BANK_ACCOUNT/987654321/addMoney")
         ).respond(
             HttpResponse.response()
                 .withStatusCode(200)
@@ -54,8 +59,8 @@ class MoneyTransferItemControllerTest {
             Money.from(100.0, Currency.EUR),
             ValueDate(LocalDate.now()),
             Purpose("Test"),
-            Account(AccountType("SAVINGS"), AccountIdentifier("123456789")),
-            Account(AccountType("SAVINGS"), AccountIdentifier("987654321"))
+            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
+            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
         )
 
         webTestClient.post()
@@ -64,5 +69,14 @@ class MoneyTransferItemControllerTest {
             .bodyValue(mapper.writeValueAsString(moneyTransferItem))
             .exchange()
             .expectStatus().isOk
+
+        moneyTransferItems.getAll() shouldContainExactly listOf(moneyTransferItem)
+        moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly listOf(
+            moneyTransferItem
+        )
+        moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly listOf(
+            moneyTransferItem
+        )
+
     }
 }

@@ -1,16 +1,16 @@
 package de.rwth.swc.piggybank.domain.transfers
 
 import DefaultMoneyTransferItemService
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
 import de.rwth.swc.piggybank.domain.transfers.spi.event.NewMoneyTransferItemEvent
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import io.mockk.every
 import org.instancio.Instancio
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

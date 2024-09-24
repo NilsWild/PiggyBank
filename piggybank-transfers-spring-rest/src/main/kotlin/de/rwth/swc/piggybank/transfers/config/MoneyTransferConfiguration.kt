@@ -3,10 +3,10 @@ package de.rwth.swc.piggybank.transfers.config
 import DefaultMoneyTransferItemService
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import io.github.projectmapk.jackson.module.kogera.KotlinFeature
 import io.github.projectmapk.jackson.module.kogera.KotlinModule
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 /**
  * Configuration class for setting up beans for the domain services and adding required configurations.

@@ -1,7 +1,7 @@
 package de.rwth.swc.piggybank.domain.transfers.api
 
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 
 /**
  * Service interface for managing money transfer items.
