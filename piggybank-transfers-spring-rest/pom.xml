@@ -105,11 +105,6 @@
             <groupId>de.rwth.swc</groupId>
             <artifactId>piggybank-domain</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.uuid</groupId>
-            <artifactId>java-uuid-generator</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
