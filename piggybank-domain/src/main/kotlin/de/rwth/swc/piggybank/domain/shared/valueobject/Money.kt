@@ -1,5 +1,8 @@
 package de.rwth.swc.piggybank.domain.shared.valueobject
 
+import com.sun.org.apache.xpath.internal.operations.Number
+import java.text.NumberFormat
+import java.util.*
 import kotlin.math.pow
 
 /**
@@ -13,8 +16,10 @@ data class Money(
     val currency: Currency
 ) {
     override fun toString(): String {
-        val formattedAmount = String.format(
-            "%.${currency.decimalPlaces}f",
+        val numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY)
+        numberFormat.minimumFractionDigits = currency.decimalPlaces.value
+        numberFormat.maximumFractionDigits = currency.decimalPlaces.value
+        val formattedAmount = numberFormat.format(
             amount.value / 10.0.pow(currency.decimalPlaces.value.toDouble())
         )
         return "${currency.symbol} $formattedAmount"
