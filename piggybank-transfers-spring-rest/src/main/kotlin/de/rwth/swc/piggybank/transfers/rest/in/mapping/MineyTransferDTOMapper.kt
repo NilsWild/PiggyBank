@@ -1,17 +1,9 @@
 package de.rwth.swc.piggybank.transfers.rest.`in`.mapping
 
-import com.fasterxml.uuid.Generators
 import de.rwth.swc.piggybank.domain.shared.valueobject.*
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
-import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
-import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
-import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
-import de.rwth.swc.piggybank.transfers.repository.entity.AccountEntity
-import de.rwth.swc.piggybank.transfers.repository.entity.MoneyTransferItemEntity
-import de.rwth.swc.piggybank.transfers.repository.entity.mapping.MoneyTransferItemMapper
 import de.rwth.swc.piggybank.transfers.rest.`in`.datatransferobject.MoneyTransferDTO
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 /**
  * Mapper interface for converting between MoneyTransferDTOs and MoneyTransferItem domain objects.

@@ -1,11 +1,7 @@
 package de.rwth.swc.piggybank.transfers.rest.`in`
 
-import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
-import de.rwth.swc.piggybank.domain.shared.valueobject.Money
-import de.rwth.swc.piggybank.domain.shared.valueobject.MoneyAmount
 import de.rwth.swc.piggybank.domain.transfers.api.MoneyTransferItemService
 import de.rwth.swc.piggybank.transfers.rest.`in`.datatransferobject.MoneyTransferDTO
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.transfers.rest.`in`.mapping.MoneyTransferDTOMapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

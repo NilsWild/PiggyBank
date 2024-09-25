@@ -2,14 +2,11 @@ package de.rwth.swc.piggybank.transfers.rest.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.rwth.swc.piggybank.domain.shared.valueobject.*
-import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.transfers.rest.`in`.datatransferobject.MoneyTransferDTO
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
 import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
 import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
 import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
-import de.rwth.swc.piggybank.transfers.repository.entity.mapping.MoneyTransferItemMapper
 import de.rwth.swc.piggybank.transfers.rest.`in`.mapping.MoneyTransferDTOMapper
 import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.jupiter.api.BeforeEach

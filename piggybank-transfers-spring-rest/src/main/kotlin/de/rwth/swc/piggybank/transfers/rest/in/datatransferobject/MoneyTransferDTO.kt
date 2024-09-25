@@ -1,12 +1,9 @@
 package de.rwth.swc.piggybank.transfers.rest.`in`.datatransferobject
 
 import de.rwth.swc.piggybank.domain.shared.valueobject.Account
-import de.rwth.swc.piggybank.domain.shared.valueobject.Money
-import de.rwth.swc.piggybank.domain.shared.valueobject.MoneyAmount
 import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
 import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
 import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
-import java.util.Currency
 
 
 /**
