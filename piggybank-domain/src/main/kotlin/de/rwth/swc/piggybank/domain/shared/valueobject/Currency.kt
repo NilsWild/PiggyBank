@@ -41,11 +41,7 @@ data class Currency(
                 .filter { it.type == Currency::class.java }  // Ensure the field is of type Currency
                 .mapNotNull {
                     it.isAccessible = true
-                    try {
-                        it.get(null) as? Currency  // Safely cast to Currency, or null if the cast fails
-                    } catch (e: Exception) {
-                        null  // Ignore fields that can't be cast to Currency
-                    }
+                    it.get(null) as Currency
                 }
                 .firstOrNull { it.isoCode.value == isoCode }
                 ?: throw IllegalArgumentException("Invalid currency code: $isoCode")
