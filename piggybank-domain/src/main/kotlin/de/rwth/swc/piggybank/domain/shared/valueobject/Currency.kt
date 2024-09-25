@@ -46,6 +46,28 @@ data class Currency(
                 .firstOrNull { it.isoCode.value == isoCode }
                 ?: throw IllegalArgumentException("Invalid currency code: $isoCode")
         }
+
+        fun toISOCurrencyStandard(name: String): Currency {
+            return when (name) {
+                "EUR" -> EUR
+                "USD" -> USD
+                "GBP" -> GBP
+                else -> {
+                    throw IllegalArgumentException("Invalid currency name: $name")
+                }
+            }
+        }
+    }
+
+    fun fromCurrencyNameToISOName(): String {
+        return when (name.value) {
+            EUR.name.toString() -> "EUR"
+            USD.name.toString() -> "USD"
+            GBP.name.toString() -> "GBP"
+            else -> {
+                throw IllegalArgumentException("Invalid currency name: $name")
+            }
+        }
     }
 }
 
