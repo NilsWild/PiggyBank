@@ -24,5 +24,5 @@ interface AccountTwins {
      * @param account The account to retrieve the account twin for.
      * @return The account twin for the account if it exists, else null.
      */
-    fun getAccount(account: Account): AccountTwin
+    fun getAccount(account: Account): AccountTwin?
 }
