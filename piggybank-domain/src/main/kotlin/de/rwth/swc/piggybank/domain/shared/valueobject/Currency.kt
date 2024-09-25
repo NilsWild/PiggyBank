@@ -25,7 +25,7 @@ data class Currency(
          * @param decimalPlaces The number of decimal places used with the currency.
          * @return A new instance of Currency.
          */
-        fun fromISOCode(name: String, symbol: String, decimalPlaces: Int): Currency {
+        fun from(name: String, symbol: String, decimalPlaces: Int): Currency {
             return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces))
         }
 
