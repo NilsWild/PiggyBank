@@ -9,7 +9,6 @@ import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
 import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
 import de.rwth.swc.piggybank.transfers.repository.entity.MoneyTransferItemEntity
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 /**
  * Mapper interface for converting between MoneyTransferItem domain objects and MoneyTransferItemEntity persistence objects.
@@ -47,7 +46,7 @@ class MoneyTransferItemMapperImpl(private val accountMapper: AccountMapper) : Mo
         return MoneyTransferItemEntity(
             id = item.id.value,
             amount = item.amount.amount.value,
-            currency = item.amount.currency.to(),
+            currency = item.amount.currency.toISOCode(),
             valueDate = item.valueDate.value,
             purpose = item.purpose.value,
             source = accountMapper.toPersistence(item.source),
@@ -66,7 +65,7 @@ class MoneyTransferItemMapperImpl(private val accountMapper: AccountMapper) : Mo
             id = MoneyTransferItemId(entity.id),
             amount = Money(
                 amount = MoneyAmount(entity.amount),
-                currency = Currency.from(entity.currency),
+                currency = Currency.fromISOCode(entity.currency),
             ),
             valueDate = ValueDate(entity.valueDate),
             purpose = Purpose(entity.purpose),

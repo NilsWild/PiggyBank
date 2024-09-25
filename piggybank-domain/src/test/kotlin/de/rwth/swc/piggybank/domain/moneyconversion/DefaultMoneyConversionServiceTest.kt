@@ -60,7 +60,7 @@ class DefaultMoneyConversionServiceTest {
 
     @Test
     fun `test convert with no suitable converter`() {
-        val inr = Currency.from("INR", "₹", 0)
+        val inr = Currency.fromISOCode("INR", "₹", 0)
         val moneyInInr = Money.from(100.0, inr)
         every { mockConverter.canConvert(inr, usd) } returns false
 
