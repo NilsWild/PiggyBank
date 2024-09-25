@@ -40,4 +40,44 @@ class MoneyTest {
 
         money.toString() shouldBe "$ 100,00"
     }
+
+    @Test
+    fun `test money addition with same currency`() {
+        val money1 = Money.from(100.0, Currency.USD)
+        val money2 = Money.from(50.0, Currency.USD)
+
+        val money = money1 + money2
+
+        money.toString() shouldBe "$ 150,00"
+    }
+
+    @Test
+    fun `test money addition with different currency`() {
+        val money1 = Money.from(100.0, Currency.USD)
+        val money2 = Money.from(50.0, Currency.EUR)
+
+        shouldThrow<IllegalArgumentException> {
+            money1 + money2
+        }
+    }
+
+    @Test
+    fun `test money subtraction with same currency`() {
+        val money1 = Money.from(100.0, Currency.USD)
+        val money2 = Money.from(50.0, Currency.USD)
+
+        val money = money1 - money2
+
+        money.toString() shouldBe "$ 50,00"
+    }
+
+    @Test
+    fun `test money subtraction with different currency`() {
+        val money1 = Money.from(100.0, Currency.USD)
+        val money2 = Money.from(50.0, Currency.EUR)
+
+        shouldThrow<IllegalArgumentException> {
+            money1 - money2
+        }
+    }
 }

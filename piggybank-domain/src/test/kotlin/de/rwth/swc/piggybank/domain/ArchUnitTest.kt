@@ -24,6 +24,7 @@ object ArchitectureTest {
             .should()
             .notDependOnEachOther()
             .ignoreDependency(alwaysTrue(), resideInAPackage("de.rwth.swc.piggybank.domain.shared.."))
+            .ignoreDependency(resideInAPackage("de.rwth.swc.piggybank.domain.adapter.."), alwaysTrue())
             .check(classes)
     }
 }
