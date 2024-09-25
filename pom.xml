@@ -32,9 +32,17 @@
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <mockserver.version>5.15.0</mockserver.version>
         <archunit.version>1.3.0</archunit.version>
-        <mapstruct.version>1.6.2</mapstruct.version>
+        <mapstruct.version>1.6.2</ma pstruct.version>
         <fasterxml.uuid.version>4.3.0</fasterxml.uuid.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

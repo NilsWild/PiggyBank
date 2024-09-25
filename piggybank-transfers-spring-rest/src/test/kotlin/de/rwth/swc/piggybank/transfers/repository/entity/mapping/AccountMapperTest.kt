@@ -23,9 +23,7 @@ class AccountMapperTest {
 
         val persistentAccount1 = mapper.toPersistence(account1)
         val persistentAccount2 = mapper.toPersistence(account2)
-        persistentAccount1.type shouldBe persistentAccount2.type
-        persistentAccount1.identifier shouldBe persistentAccount2.identifier
-        persistentAccount1.id shouldBe persistentAccount2.id
+        persistentAccount1 shouldBe persistentAccount2
     }
 
     @Test

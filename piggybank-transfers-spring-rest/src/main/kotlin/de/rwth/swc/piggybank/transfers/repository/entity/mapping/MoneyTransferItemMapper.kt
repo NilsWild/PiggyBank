@@ -46,7 +46,7 @@ class MoneyTransferItemMapperImpl(private val accountMapper: AccountMapper) : Mo
         return MoneyTransferItemEntity(
             id = item.id.value,
             amount = item.amount.amount.value,
-            currency = item.amount.currency.toISOCode(),
+            currency = item.amount.currency.isoCode.value,
             valueDate = item.valueDate.value,
             purpose = item.purpose.value,
             source = accountMapper.toPersistence(item.source),
