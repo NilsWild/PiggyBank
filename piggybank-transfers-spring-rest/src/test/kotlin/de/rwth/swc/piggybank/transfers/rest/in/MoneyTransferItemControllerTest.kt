@@ -2,12 +2,12 @@ package de.rwth.swc.piggybank.transfers.rest.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.rwth.swc.piggybank.domain.shared.valueobject.*
-import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
+import de.rwth.swc.piggybank.transfers.rest.`in`.datatransferobject.MoneyTransferDTO
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
 import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
 import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
 import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
+import de.rwth.swc.piggybank.transfers.rest.`in`.mapping.MoneyTransferDTOMapper
 import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -33,6 +33,9 @@ class MoneyTransferItemControllerTest {
     lateinit var mapper: ObjectMapper
 
     @Autowired
+    lateinit var dtoMapper: MoneyTransferDTOMapper
+
+    @Autowired
     lateinit var mockServer: ClientAndServer
 
     @Autowired
@@ -54,28 +57,29 @@ class MoneyTransferItemControllerTest {
                 .withStatusCode(200)
         )
 
-        val moneyTransferItem = MoneyTransferItem(
-            MoneyTransferItemId(UUID.randomUUID()),
-            Money.from(100.0, Currency.EUR),
-            ValueDate(LocalDate.now()),
-            Purpose("Test"),
-            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
-            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
+        val moneyTransferDTO = MoneyTransferDTO(
+            id = MoneyTransferItemId(UUID.randomUUID()),
+            currency = "GBP",
+            amount = 100.0,
+            valueDate = ValueDate(LocalDate.now()),
+            purpose = Purpose("Test"),
+            source = Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
+            target = Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
         )
 
         webTestClient.post()
             .uri("/api/transfers")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(mapper.writeValueAsString(moneyTransferItem))
+            .bodyValue(mapper.writeValueAsString(moneyTransferDTO))
             .exchange()
             .expectStatus().isOk
 
-        moneyTransferItems.getAll() shouldContainExactly listOf(moneyTransferItem)
-        moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly listOf(
-            moneyTransferItem
+        moneyTransferItems.getAll() shouldContainExactly listOf(dtoMapper.toDomain(moneyTransferDTO))
+        moneyTransferItems.getAllTransferredToTarget(moneyTransferDTO.target) shouldContainExactly listOf(
+            dtoMapper.toDomain(moneyTransferDTO)
         )
-        moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly listOf(
-            moneyTransferItem
+        moneyTransferItems.getAllReceivedFromSource(moneyTransferDTO.source) shouldContainExactly listOf(
+            dtoMapper.toDomain(moneyTransferDTO)
         )
 
     }
