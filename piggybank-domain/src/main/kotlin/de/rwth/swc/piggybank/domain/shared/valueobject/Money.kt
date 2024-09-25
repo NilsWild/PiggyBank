@@ -24,6 +24,16 @@ data class Money(
         return "${currency.symbol} $formattedAmount"
     }
 
+    operator fun plus(other: Money): Money {
+        require(currency == other.currency)
+        return Money(amount = MoneyAmount(amount.value+other.amount.value), currency = currency)
+    }
+
+    operator fun minus(other: Money): Money {
+        require(currency == other.currency)
+        return Money(amount = MoneyAmount(amount.value-other.amount.value), currency = currency)
+    }
+
     companion object {
         /**
          * Factory method to create a Money instance from a double representation of the amount and a currency.
