@@ -1,6 +1,5 @@
 package de.rwth.swc.piggybank.domain.shared.valueobject
 
-import com.sun.org.apache.xpath.internal.operations.Number
 import java.text.NumberFormat
 import java.util.*
 import kotlin.math.pow

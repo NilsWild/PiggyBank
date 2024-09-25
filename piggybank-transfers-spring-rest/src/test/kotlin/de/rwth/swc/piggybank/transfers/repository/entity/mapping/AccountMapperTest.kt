@@ -5,17 +5,16 @@ import de.rwth.swc.piggybank.domain.shared.valueobject.AccountIdentifier
 import de.rwth.swc.piggybank.domain.shared.valueobject.AccountType
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountMapperTest {
-    @Autowired
-    lateinit var mapper: AccountMapper
+    val mapper: AccountMapper = AccountMapperImpl()
 
     @Test
-    fun `same acccounts are mapped to same id`() {
+    fun `same acccounts are mapped to same persistence object`() {
         val account1 = Account(
             type = AccountType("TEST"),
             identifier = AccountIdentifier("TESTACCOUNT")
@@ -30,7 +29,7 @@ class AccountMapperTest {
     }
 
     @Test
-    fun `different accounts are mapped to a different id (type differs)`() {
+    fun `different accounts are mapped to a different persistence object (type differs)`() {
         val account1 = Account(
             type = AccountType("TEST1"),
             identifier = AccountIdentifier("TESTACCOUNT"),
@@ -49,7 +48,7 @@ class AccountMapperTest {
     }
 
     @Test
-    fun `different accounts are mapped to a different id (identifier differs)`() {
+    fun `different accounts are mapped to a different persistence object (identifier differs)`() {
         val account1 = Account(
             type = AccountType("TEST"),
             identifier = AccountIdentifier("TESTACCOUNT1"),
@@ -68,7 +67,7 @@ class AccountMapperTest {
     }
 
     @Test
-    fun `different accounts are mapped to a different id (type and identifier differ)`() {
+    fun `different accounts are mapped to a different persistence object (type and identifier differ)`() {
         val account1 = Account(
             type = AccountType("TEST1"),
             identifier = AccountIdentifier("TESTACCOUNT1"),

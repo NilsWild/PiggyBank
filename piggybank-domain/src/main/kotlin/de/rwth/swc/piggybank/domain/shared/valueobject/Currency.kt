@@ -10,12 +10,13 @@ package de.rwth.swc.piggybank.domain.shared.valueobject
 data class Currency(
     val name: CurrencyName,
     val symbol: CurrencySymbol,
-    val decimalPlaces: DecimalPlaces
+    val decimalPlaces: DecimalPlaces,
+    val isoCode: ISOCode
 ) {
     companion object {
-        val EUR = Currency(CurrencyName("Euro"), CurrencySymbol("€"), DecimalPlaces(2))
-        val USD = Currency(CurrencyName("US Dollar"), CurrencySymbol("$"), DecimalPlaces(2))
-        val GBP = Currency(CurrencyName("British Pound"), CurrencySymbol("£"), DecimalPlaces(2))
+        val EUR = Currency(CurrencyName("Euro"), CurrencySymbol("€"), DecimalPlaces(2), ISOCode("EUR"))
+        val USD = Currency(CurrencyName("US Dollar"), CurrencySymbol("$"), DecimalPlaces(2), ISOCode("USD"))
+        val GBP = Currency(CurrencyName("British Pound"), CurrencySymbol("£"), DecimalPlaces(2), ISOCode("GBP"))
 
         /**
          * Factory method to create a Currency instance from simple types.
@@ -23,32 +24,31 @@ data class Currency(
          * @param name The name of the currency.
          * @param symbol The symbol of the currency.
          * @param decimalPlaces The number of decimal places used with the currency.
+         * @param isoCode The iso code of the currency
          * @return A new instance of Currency.
          */
-        fun from(name: String, symbol: String, decimalPlaces: Int): Currency {
-            return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces))
+        fun from(name: String, symbol: String, decimalPlaces: Int, isoCode: String): Currency {
+            return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces), ISOCode(isoCode))
         }
 
-        fun fromISOCode(id: String): Currency {
-            return when (id) {
-                "EUR" -> EUR
-                "USD" -> USD
-                "GBP" -> GBP
-                else -> {
-                    throw IllegalArgumentException("Invalid currency id: $id")
+        /**
+         * Factory method to get a Currency by ISO code
+         *
+         * @param isoCode The iso code of the currency
+         */
+        fun fromISOCode(isoCode: String): Currency {
+            return Currency::class.java.declaredFields
+                .filter { it.type == Currency::class.java }  // Ensure the field is of type Currency
+                .mapNotNull {
+                    it.isAccessible = true
+                    try {
+                        it.get(null) as? Currency  // Safely cast to Currency, or null if the cast fails
+                    } catch (e: Exception) {
+                        null  // Ignore fields that can't be cast to Currency
+                    }
                 }
-            }
-        }
-    }
-
-    fun toISOCode(): String {
-        return when (name.value) {
-            "Euro" -> "EUR"
-            "US Dollar" -> "USD"
-            "British Pound" -> "GBP"
-            else -> {
-                throw IllegalArgumentException("Invalid currency name: $name")
-            }
+                .firstOrNull { it.isoCode.value == isoCode }
+                ?: throw IllegalArgumentException("Invalid currency code: $isoCode")
         }
     }
 }
@@ -98,5 +98,21 @@ value class DecimalPlaces(val value: Int) {
 
     override fun toString(): String {
         return value.toString()
+    }
+}
+
+/**
+ * Inline value class for the ISO code.
+ *
+ * @property value The ISO code of a currency
+ */
+@JvmInline
+value class ISOCode(val value: String) {
+    init {
+        require(value.length == 3) { "ISO code must have 3 characters" }
+    }
+
+    override fun toString(): String {
+        return value
     }
 }
