@@ -1,10 +1,10 @@
 package de.rwth.swc.piggybank.transfers.config
 
 import DefaultMoneyTransferItemService
+import com.fasterxml.jackson.module.kotlin.KotlinFeature
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
-import io.github.projectmapk.jackson.module.kogera.KotlinFeature
-import io.github.projectmapk.jackson.module.kogera.KotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

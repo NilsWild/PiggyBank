@@ -21,6 +21,9 @@ class DefaultMoneyConversionService(private val currencyConverters: List<Currenc
      * @throws IllegalArgumentException If no suitable converter is found.
      */
     override fun convert(money: Money, targetCurrency: Currency): Money {
+        if(money.currency == targetCurrency) {
+            return money
+        }
         val converter = currencyConverters.find { it.canConvert(money.currency, targetCurrency) }
         return converter?.convert(money, targetCurrency)
             ?: throw IllegalArgumentException("No converter found for ${money.currency} to $targetCurrency")

@@ -1,5 +1,7 @@
 package de.rwth.swc.piggybank.transfers.rest.out
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
+import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
@@ -19,12 +21,13 @@ class AccountTwinClientConfiguration {
      * @return An instance of AccountTwinService.
      */
     @Bean
-    fun accountTwinClient(loadBalancedWebClientBuilder: WebClient.Builder): AccountTwinService {
+    fun accountTwinClient(webClientBuilder: WebClient.Builder, lbFunction: ReactorLoadBalancerExchangeFilterFunction): AccountTwinService {
         val httpServiceProxyFactory = HttpServiceProxyFactory
             .builderFor(
                 WebClientAdapter.create(
-                    loadBalancedWebClientBuilder
+                    webClientBuilder
                         .baseUrl("http://piggybank-accounttwin-spring-rest")
+                        .filter(lbFunction)
                         .build()
                 )
             ).build()

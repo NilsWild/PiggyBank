@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
+import org.springframework.web.filter.CommonsRequestLoggingFilter
 
 @TestConfiguration
 class MockServerConfig {

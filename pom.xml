@@ -28,7 +28,6 @@
         <mockk.version>1.13.10</mockk.version>
         <kotest.version>5.8.0</kotest.version>
         <instancio.version>4.1.0</instancio.version>
-        <jackson.kogera.version>2.17.1-beta13</jackson.kogera.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <mockserver.version>5.15.0</mockserver.version>
         <archunit.version>1.3.0</archunit.version>
@@ -98,11 +97,6 @@
                 <artifactId>archunit-junit5</artifactId>
                 <version>${archunit.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.github.ProjectMapK</groupId>
-                <artifactId>jackson-module-kogera</artifactId>
-                <version>${jackson.kogera.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.interact</groupId>

@@ -22,6 +22,10 @@
             <artifactId>java-uuid-generator</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -62,13 +66,18 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,11 +104,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.ProjectMapK</groupId>
-            <artifactId>jackson-module-kogera</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
@@ -109,6 +113,27 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+        </dependency>
+        <!-- InterACt Dependencies -->
+        <dependency>
+            <groupId>de.interact</groupId>
+            <artifactId>interact-observer-spring-webclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.interact</groupId>
+            <artifactId>interact-observer-spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.interact</groupId>
+            <artifactId>interact-junit5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.interact</groupId>
+            <artifactId>interact-observation-context-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.interact</groupId>
+            <artifactId>interact-controller-api</artifactId>
         </dependency>
 
         <dependency>
