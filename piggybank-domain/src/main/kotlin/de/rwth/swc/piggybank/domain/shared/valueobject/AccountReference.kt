@@ -6,7 +6,7 @@ package de.rwth.swc.piggybank.domain.shared.valueobject
  * @property type The type of the account.
  * @property identifier The identifier of the account.
  */
-data class Account(
+data class AccountReference(
     val type: AccountType,
     val identifier: AccountIdentifier
 )

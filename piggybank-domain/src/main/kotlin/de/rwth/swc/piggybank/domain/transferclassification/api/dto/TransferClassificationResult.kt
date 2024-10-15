@@ -1,7 +1,7 @@
 package de.rwth.swc.piggybank.domain.transferclassification.api.dto
 
 import de.rwth.swc.piggybank.domain.transferclassification.valueobject.TransferClassification
-import de.rwth.swc.piggybank.domain.transferclassification.valueobject.TransferReference
+import de.rwth.swc.piggybank.domain.shared.valueobject.TransferReference
 
 /**
  * Represents a classification result of a transfer.

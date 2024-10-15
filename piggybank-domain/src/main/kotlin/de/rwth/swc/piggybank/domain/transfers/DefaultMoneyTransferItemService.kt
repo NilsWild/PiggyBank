@@ -1,4 +1,4 @@
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.transfers.api.MoneyTransferItemService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
@@ -25,11 +25,11 @@ class DefaultMoneyTransferItemService(
         return transferItems.getAll()
     }
 
-    override fun getReceivedFromSource(source: Account): Collection<MoneyTransferItem> {
+    override fun getReceivedFromSource(source: AccountReference): Collection<MoneyTransferItem> {
         return transferItems.getAllReceivedFromSource(source)
     }
 
-    override fun getTransferredToTarget(target: Account): Collection<MoneyTransferItem> {
+    override fun getTransferredToTarget(target: AccountReference): Collection<MoneyTransferItem> {
         return transferItems.getAllTransferredToTarget(target)
     }
 

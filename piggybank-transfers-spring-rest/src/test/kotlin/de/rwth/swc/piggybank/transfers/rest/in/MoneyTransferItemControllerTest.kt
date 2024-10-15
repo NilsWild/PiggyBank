@@ -14,7 +14,6 @@ import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.mockserver.integration.ClientAndServer
@@ -25,9 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
-import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
@@ -101,8 +98,8 @@ class MoneyTransferItemControllerTest {
             Money.from(100.0, Currency.EUR),
             ValueDate(LocalDate.now()),
             Purpose("Test"),
-            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
-            Account(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
+            AccountReference(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
+            AccountReference(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
         )
 
         val stimulus = RestMessage.Request(

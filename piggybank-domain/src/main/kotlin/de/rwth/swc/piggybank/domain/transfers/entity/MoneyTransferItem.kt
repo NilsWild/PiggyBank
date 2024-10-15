@@ -1,6 +1,6 @@
 package de.rwth.swc.piggybank.domain.transfers.entity
 
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.shared.valueobject.Money
 import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
 import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
@@ -22,6 +22,6 @@ data class MoneyTransferItem(
     val amount: Money,
     val valueDate: ValueDate,
     val purpose: Purpose,
-    val source: Account,
-    val target: Account
+    val source: AccountReference,
+    val target: AccountReference
 )

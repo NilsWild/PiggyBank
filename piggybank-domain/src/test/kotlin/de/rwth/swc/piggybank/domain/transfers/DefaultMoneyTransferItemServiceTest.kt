@@ -1,7 +1,7 @@
 package de.rwth.swc.piggybank.domain.transfers
 
 import DefaultMoneyTransferItemService
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
@@ -94,7 +94,7 @@ class DefaultMoneyTransferItemServiceTest {
         return Instancio.ofList(MoneyTransferItem::class.java).size(size).create()
     }
 
-    private fun createAccount(): Account {
-        return Instancio.create(Account::class.java)
+    private fun createAccount(): AccountReference {
+        return Instancio.create(AccountReference::class.java)
     }
 }

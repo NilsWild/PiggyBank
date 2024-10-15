@@ -40,4 +40,64 @@ class MoneyTest {
 
         money.toString() shouldBe "$ 100,00"
     }
+
+    @Test
+    fun `test money addition`() {
+        val currency = Currency.USD
+        val amount1 = 100.0
+        val amount2 = 200.0
+        val money1 = Money.from(amount1, currency)
+        val money2 = Money.from(amount2, currency)
+
+        val result = money1 + money2
+
+        result.amount.value shouldBe 30000L
+        result.currency shouldBe currency
+    }
+
+    @Test
+    fun `test money subtraction`() {
+        val currency = Currency.USD
+        val amount1 = 100.0
+        val amount2 = 200.0
+        val money1 = Money.from(amount1, currency)
+        val money2 = Money.from(amount2, currency)
+
+        val result = money2 - money1
+
+        result.amount.value shouldBe 10000L
+        result.currency shouldBe currency
+    }
+
+    @Test
+    fun `test money addition with different currencies`() {
+        val currency1 = Currency.USD
+        val currency2 = Currency.EUR
+        val amount1 = 100.0
+        val amount2 = 200.0
+        val money1 = Money.from(amount1, currency1)
+        val money2 = Money.from(amount2, currency2)
+
+        val exception = shouldThrow<IllegalArgumentException> {
+            money1 + money2
+        }
+
+        exception.message shouldBe "Currencies must be the same. Is $currency1 and $currency2. Use conversion service"
+    }
+
+    @Test
+    fun `test money subtraction with different currencies`() {
+        val currency1 = Currency.USD
+        val currency2 = Currency.EUR
+        val amount1 = 100.0
+        val amount2 = 200.0
+        val money1 = Money.from(amount1, currency1)
+        val money2 = Money.from(amount2, currency2)
+
+        val exception = shouldThrow<IllegalArgumentException> {
+            money1 - money2
+        }
+
+        exception.message shouldBe "Currencies must be the same. Is $currency1 and $currency2. Use conversion service"
+    }
 }

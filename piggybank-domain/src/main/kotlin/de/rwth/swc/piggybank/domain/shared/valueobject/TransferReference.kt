@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.transferclassification.valueobject
+package de.rwth.swc.piggybank.domain.shared.valueobject
 
 import java.util.*
 

@@ -1,6 +1,6 @@
 package de.rwth.swc.piggybank.transfers.repository
 
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
 import de.rwth.swc.piggybank.transfers.repository.entity.MoneyTransferItemEntity
@@ -69,7 +69,7 @@ class MoneyTransferItemsRepository(
      * @param source The source account.
      * @return A collection of MoneyTransferItems received from the source account.
      */
-    override fun getAllReceivedFromSource(source: Account): Collection<MoneyTransferItem> {
+    override fun getAllReceivedFromSource(source: AccountReference): Collection<MoneyTransferItem> {
         return repo.findBySourceTypeAndSourceIdentifier(source.type.value, source.identifier.value).map {
             mapper.toDomain(it)
         }
@@ -81,7 +81,7 @@ class MoneyTransferItemsRepository(
      * @param target The target account.
      * @return A collection of MoneyTransferItems transferred to the target account.
      */
-    override fun getAllTransferredToTarget(target: Account): Collection<MoneyTransferItem> {
+    override fun getAllTransferredToTarget(target: AccountReference): Collection<MoneyTransferItem> {
         return repo.findByTargetTypeAndTargetIdentifier(target.type.value, target.identifier.value).map {
             mapper.toDomain(it)
         }

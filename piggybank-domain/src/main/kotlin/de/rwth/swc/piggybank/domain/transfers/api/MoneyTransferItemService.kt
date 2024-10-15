@@ -1,6 +1,6 @@
 package de.rwth.swc.piggybank.domain.transfers.api
 
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 
 /**
@@ -28,7 +28,7 @@ interface MoneyTransferItemService {
      * @param source The source account.
      * @return A collection of money transfer items received from the source account.
      */
-    fun getReceivedFromSource(source: Account): Collection<MoneyTransferItem>
+    fun getReceivedFromSource(source: AccountReference): Collection<MoneyTransferItem>
 
     /**
      * Retrieves all money transfer items transferred to a specific target account.
@@ -36,7 +36,7 @@ interface MoneyTransferItemService {
      * @param target The target account.
      * @return A collection of money transfer items transferred to the target account.
      */
-    fun getTransferredToTarget(target: Account): Collection<MoneyTransferItem>
+    fun getTransferredToTarget(target: AccountReference): Collection<MoneyTransferItem>
 
     /**
      * Retrieves all money transfer items for a specific account.
@@ -44,7 +44,7 @@ interface MoneyTransferItemService {
      * @param account The account.
      * @return A collection of money transfer items for the account.
      */
-    fun getForAccount(account: Account): Collection<MoneyTransferItem> {
+    fun getForAccount(account: AccountReference): Collection<MoneyTransferItem> {
         val receivedFromSource = getReceivedFromSource(account)
         val transferredToTarget = getTransferredToTarget(account)
         return receivedFromSource + transferredToTarget

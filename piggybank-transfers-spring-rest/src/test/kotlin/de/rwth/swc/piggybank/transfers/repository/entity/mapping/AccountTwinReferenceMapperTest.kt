@@ -1,21 +1,18 @@
 package de.rwth.swc.piggybank.transfers.repository.entity.mapping
 
-import de.rwth.swc.piggybank.domain.shared.valueobject.Account
+import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
 import de.rwth.swc.piggybank.domain.shared.valueobject.AccountIdentifier
 import de.rwth.swc.piggybank.domain.shared.valueobject.AccountType
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 
-class AccountMapperTest {
+class AccountTwinReferenceMapperTest {
     val mapper: AccountMapper = AccountMapperImpl()
 
     @Test
     fun `same acccounts are mapped to same persistence object`() {
-        val account1 = Account(
+        val account1 = AccountReference(
             type = AccountType("TEST"),
             identifier = AccountIdentifier("TESTACCOUNT")
         )
@@ -28,11 +25,11 @@ class AccountMapperTest {
 
     @Test
     fun `different accounts are mapped to a different persistence object (type differs)`() {
-        val account1 = Account(
+        val account1 = AccountReference(
             type = AccountType("TEST1"),
             identifier = AccountIdentifier("TESTACCOUNT"),
         )
-        val account2 = Account(
+        val account2 = AccountReference(
             type = AccountType("TEST2"),
             identifier = AccountIdentifier("TESTACCOUNT"),
         )
@@ -47,11 +44,11 @@ class AccountMapperTest {
 
     @Test
     fun `different accounts are mapped to a different persistence object (identifier differs)`() {
-        val account1 = Account(
+        val account1 = AccountReference(
             type = AccountType("TEST"),
             identifier = AccountIdentifier("TESTACCOUNT1"),
         )
-        val account2 = Account(
+        val account2 = AccountReference(
             type = AccountType("TEST"),
             identifier = AccountIdentifier("TESTACCOUNT2"),
         )
@@ -66,11 +63,11 @@ class AccountMapperTest {
 
     @Test
     fun `different accounts are mapped to a different persistence object (type and identifier differ)`() {
-        val account1 = Account(
+        val account1 = AccountReference(
             type = AccountType("TEST1"),
             identifier = AccountIdentifier("TESTACCOUNT1"),
         )
-        val account2 = Account(
+        val account2 = AccountReference(
             type = AccountType("TEST2"),
             identifier = AccountIdentifier("TESTACCOUNT2"),
         )

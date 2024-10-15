@@ -14,6 +14,16 @@ data class Money(
     val amount: MoneyAmount,
     val currency: Currency
 ) {
+    operator fun plus(other: Money): Money {
+        require(currency == other.currency) { "Currencies must be the same. Is $currency and ${other.currency}. Use conversion service" }
+        return Money(MoneyAmount(amount.value + other.amount.value), currency)
+    }
+
+    operator fun minus(other: Money): Money {
+        require(currency == other.currency) { "Currencies must be the same. Is $currency and ${other.currency}. Use conversion service" }
+        return Money(MoneyAmount(amount.value - other.amount.value), currency)
+    }
+
     override fun toString(): String {
         val numberFormat = NumberFormat.getNumberInstance(Locale.GERMANY)
         numberFormat.minimumFractionDigits = currency.decimalPlaces.value
