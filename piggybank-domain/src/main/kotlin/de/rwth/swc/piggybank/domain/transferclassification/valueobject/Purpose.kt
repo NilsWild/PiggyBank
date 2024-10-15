@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.transferclassification.api.dto
+package de.rwth.swc.piggybank.domain.transferclassification.valueobject
 
 /**
  * Inline value class for the purpose of the transfer.

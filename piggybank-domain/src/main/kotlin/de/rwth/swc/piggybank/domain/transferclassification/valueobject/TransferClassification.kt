@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.transferclassification.api.dto
+package de.rwth.swc.piggybank.domain.transferclassification.valueobject
 
 /**
  * Represents a classification of a transfer.

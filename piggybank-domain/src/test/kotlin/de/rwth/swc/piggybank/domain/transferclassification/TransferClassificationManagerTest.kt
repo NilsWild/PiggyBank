@@ -1,7 +1,7 @@
 package de.rwth.swc.piggybank.domain.transferclassification
 
 import de.rwth.swc.piggybank.domain.transferclassification.api.dto.Transfer
-import de.rwth.swc.piggybank.domain.transferclassification.api.dto.TransferClassification
+import de.rwth.swc.piggybank.domain.transferclassification.valueobject.TransferClassification
 import de.rwth.swc.piggybank.domain.transferclassification.api.dto.TransferClassificationResult
 import de.rwth.swc.piggybank.domain.transferclassification.spi.TransferClassifier
 import io.kotest.matchers.shouldBe

@@ -3,7 +3,6 @@ package de.rwth.swc.piggybank.domain.transferclassification
 import de.rwth.swc.piggybank.domain.transferclassification.api.TransferClassifierService
 import de.rwth.swc.piggybank.domain.transferclassification.api.dto.Transfer
 import de.rwth.swc.piggybank.domain.transferclassification.api.dto.TransferClassificationResult
-import de.rwth.swc.piggybank.domain.transferclassification.api.dto.TransferReference
 import de.rwth.swc.piggybank.domain.transferclassification.spi.TransferClassifier
 
 /**
