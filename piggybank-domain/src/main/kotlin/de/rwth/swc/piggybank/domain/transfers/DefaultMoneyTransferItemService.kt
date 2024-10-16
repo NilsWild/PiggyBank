@@ -1,4 +1,5 @@
 import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
+import de.rwth.swc.piggybank.domain.transfers.api.AccountWatchService
 import de.rwth.swc.piggybank.domain.transfers.api.MoneyTransferItemService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
@@ -9,16 +10,20 @@ import de.rwth.swc.piggybank.domain.transfers.spi.event.NewMoneyTransferItemEven
  * Default implementation of the MoneyTransferItemService interface.
  *
  * @property transferItems The SPI interface for managing money transfer items.
+ * @property watchService The service for managing account watches.
  * @property listeners The list of listeners to notify about changes to money transfer items.
  */
 class DefaultMoneyTransferItemService(
     private val transferItems: MoneyTransferItems,
+    private val watchService: AccountWatchService,
     private val listeners: List<MoneyTransferItemChangeListener>
 ) : MoneyTransferItemService {
 
     override fun add(item: MoneyTransferItem) {
-        transferItems.save(item)
-        notifyListeners(NewMoneyTransferItemEvent(item))
+        if(watchService.isAccountWatched(item.source) || watchService.isAccountWatched(item.target)) {
+            transferItems.save(item)
+            notifyListeners(NewMoneyTransferItemEvent(item))
+        }
     }
 
     override fun getAll(): Collection<MoneyTransferItem> {

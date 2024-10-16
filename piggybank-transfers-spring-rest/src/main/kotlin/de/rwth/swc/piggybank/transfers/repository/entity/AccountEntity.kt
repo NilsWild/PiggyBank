@@ -1,7 +1,6 @@
 package de.rwth.swc.piggybank.transfers.repository.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.util.*
 
 /**
@@ -16,5 +15,9 @@ data class AccountEntity(
     @Id
     val id: UUID,
     val type: String,
-    val identifier: String
+    val identifier: String,
+    @OneToMany
+    val transfers: Set<MoneyTransferItemEntity> = emptySet(),
+    @OneToOne
+    val watch: AccountWatchEntity? = null
 )

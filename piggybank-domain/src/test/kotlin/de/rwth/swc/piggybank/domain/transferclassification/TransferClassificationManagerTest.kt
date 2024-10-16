@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class TransferClassificationManagerTest {
 
     @MockK
-    lateinit var transferClassifier: TransferClassifier
+    private lateinit var transferClassifier: TransferClassifier
 
     @Test
     fun `classify should return classification result`() {

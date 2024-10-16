@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.util
+package de.rwth.swc.piggybank.util
 
 import org.instancio.Select
 import org.instancio.TargetSelector

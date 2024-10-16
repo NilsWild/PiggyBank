@@ -1,4 +1,4 @@
-package de.rwth.swc.piggybank.domain.util
+package de.rwth.swc.piggybank.util
 
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency.Companion.EUR

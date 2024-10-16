@@ -1,18 +1,18 @@
 package de.rwth.swc.piggybank.transfers.rest.`in`
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import de.interact.domain.rest.RestMessage
 import de.interact.junit.jupiter.annotation.InterACtTest
 import de.interact.rest.TestRestClient
-import de.rwth.swc.piggybank.domain.shared.valueobject.*
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
+import de.rwth.swc.piggybank.domain.transfers.api.AccountWatchService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
-import de.rwth.swc.piggybank.domain.transfers.valueobject.MoneyTransferItemId
-import de.rwth.swc.piggybank.domain.transfers.valueobject.Purpose
-import de.rwth.swc.piggybank.domain.transfers.valueobject.ValueDate
+import de.rwth.swc.piggybank.util.CURRENCY_SUPPLIER
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import jakarta.transaction.Transactional
+import org.instancio.Instancio
+import org.instancio.Select.all
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -25,34 +25,31 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatusCode
-import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import java.time.LocalDate
-import java.util.*
+import java.util.function.Supplier
 import java.util.stream.Stream
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(MockServerConfig::class, InterACtConfig::class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class MoneyTransferItemControllerTest {
 
     @LocalServerPort
     private lateinit var port: Number
 
     @Autowired
-    lateinit var webTestClient: WebTestClient
-
-    @Autowired
     private lateinit var webClientBuilder: WebClient.Builder
-
-    @Autowired
-    lateinit var mapper: ObjectMapper
 
     @Autowired
     lateinit var mockServer: ClientAndServer
 
     @Autowired
     lateinit var moneyTransferItems: MoneyTransferItems
+
+    @Autowired
+    lateinit var accountWatchService: AccountWatchService
 
     private lateinit var testClient: TestRestClient
 
@@ -64,9 +61,10 @@ class MoneyTransferItemControllerTest {
 
     @InterACtTest
     @MethodSource("moneyTransfer")
-    fun `add money transfer item should call account service`(stimulus: RestMessage.Request<MoneyTransferItem>, accountServiceResponse: RestMessage.Response<String>) {
+    fun `add money transfer item to watched account should call account service`(stimulus: RestMessage.Request<MoneyTransferItem>, accountServiceResponse: RestMessage.Response<String>) {
 
         val moneyTransferItem = stimulus.body!!
+        accountWatchService.addWatchedAccount(moneyTransferItem.target)
 
         mockServer.`when`(
             HttpRequest.request()
@@ -90,17 +88,45 @@ class MoneyTransferItemControllerTest {
             moneyTransferItem
         )
 
+        mockServer.verify(
+            HttpRequest.request()
+                .withMethod("POST")
+                .withPath(accountServiceResponse.path)
+        )
+
+    }
+
+    @InterACtTest
+    @MethodSource("moneyTransfer")
+    fun `add money transfer item to non watched account should not call account service`(stimulus: RestMessage.Request<MoneyTransferItem>, accountServiceResponse: RestMessage.Response<String>) {
+
+        val moneyTransferItem = stimulus.body!!
+
+        mockServer.`when`(
+            HttpRequest.request()
+                .withMethod("POST")
+                .withPath(accountServiceResponse.path)
+        ).respond(
+            HttpResponse.response()
+                .withStatusCode(accountServiceResponse.statusCode)
+        )
+
+        testClient.prepare(HttpMethod.POST, stimulus).exchangeToMono {
+            it.statusCode() shouldBe HttpStatusCode.valueOf(200)
+            it.bodyToMono<String>()
+        }.block()
+
+        moneyTransferItems.getAll() shouldContainExactly emptyList()
+        moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly emptyList()
+        moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly emptyList()
+
+        mockServer.verifyZeroInteractions()
     }
 
     fun moneyTransfer(): Stream<Arguments> {
-        val moneyTransferItem = MoneyTransferItem(
-            MoneyTransferItemId(UUID.randomUUID()),
-            Money.from(100.0, Currency.EUR),
-            ValueDate(LocalDate.now()),
-            Purpose("Test"),
-            AccountReference(AccountType("BANK_ACCOUNT"), AccountIdentifier("123456789")),
-            AccountReference(AccountType("BANK_ACCOUNT"), AccountIdentifier("987654321"))
-        )
+        val moneyTransferItem = Instancio.of(MoneyTransferItem::class.java).supply(
+            all(Currency::class.java), Supplier { CURRENCY_SUPPLIER.create() }
+        ).create()
 
         val stimulus = RestMessage.Request(
             "/api/transfers",
@@ -110,7 +136,7 @@ class MoneyTransferItemControllerTest {
         )
 
         val response = RestMessage.Response(
-            "/api/accounts/BANK_ACCOUNT/987654321/addMoney",
+            "/api/accounts/${moneyTransferItem.target.type}/${moneyTransferItem.target.identifier}/addMoney",
             mapOf(),
             mapOf(),
             "",

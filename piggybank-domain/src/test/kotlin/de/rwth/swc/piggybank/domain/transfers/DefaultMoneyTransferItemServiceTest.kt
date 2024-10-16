@@ -2,6 +2,8 @@ package de.rwth.swc.piggybank.domain.transfers
 
 import DefaultMoneyTransferItemService
 import de.rwth.swc.piggybank.domain.shared.valueobject.AccountReference
+import de.rwth.swc.piggybank.domain.transfers.api.AccountWatchService
+import de.rwth.swc.piggybank.domain.transfers.api.MoneyTransferItemService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItemChangeListener
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
@@ -9,30 +11,42 @@ import de.rwth.swc.piggybank.domain.transfers.spi.event.NewMoneyTransferItemEven
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.instancio.Instancio
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(MockKExtension::class)
 class DefaultMoneyTransferItemServiceTest {
 
     @MockK
-    lateinit var transferItems: MoneyTransferItems
+    private lateinit var transferItems: MoneyTransferItems
 
     @MockK
-    lateinit var listener: MoneyTransferItemChangeListener
+    private lateinit var listener: MoneyTransferItemChangeListener
 
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this, relaxed = true)
+    @MockK
+    private lateinit var accountWatchService: AccountWatchService
+
+    private val service: DefaultMoneyTransferItemService
+
+    init {
+        MockKAnnotations.init(this)
+        service = DefaultMoneyTransferItemService(transferItems, accountWatchService, listOf(listener))
     }
 
     @Test
     fun `should add a new MoneyTransferItem and notify listeners`() {
         // Arrange
-        val service = DefaultMoneyTransferItemService(transferItems, listOf(listener))
         val item = createMoneyTransferItem()
+        every { accountWatchService.isAccountWatched(item.source) } returns true
+        every { accountWatchService.isAccountWatched(item.target) } returns true
+        every { transferItems.save(item) } answers {}
+        every { listener.onNewMoneyTransferItem(any()) } answers {}
 
         // Act
         service.add(item)
@@ -45,7 +59,6 @@ class DefaultMoneyTransferItemServiceTest {
     @Test
     fun `should return all MoneyTransferItems`() {
         // Arrange
-        val service = DefaultMoneyTransferItemService(transferItems, emptyList())
         val items = createMoneyTransferItemList(3)
         every { transferItems.getAll() } returns items
 
@@ -59,7 +72,6 @@ class DefaultMoneyTransferItemServiceTest {
     @Test
     fun `should return MoneyTransferItems received from a specific source`() {
         // Arrange
-        val service = DefaultMoneyTransferItemService(transferItems, emptyList())
         val source = createAccount()
         val items = createMoneyTransferItemList(2)
         every { transferItems.getAllReceivedFromSource(source) } returns items
@@ -74,7 +86,6 @@ class DefaultMoneyTransferItemServiceTest {
     @Test
     fun `should return MoneyTransferItems transferred to a specific target`() {
         // Arrange
-        val service = DefaultMoneyTransferItemService(transferItems, emptyList())
         val target = createAccount()
         val items = createMoneyTransferItemList(2)
         every { transferItems.getAllTransferredToTarget(target) } returns items

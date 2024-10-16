@@ -8,4 +8,6 @@ import java.time.LocalDate
  * @property value The date of the transfer.
  */
 @JvmInline
-value class ValueDate(val value: LocalDate)
+value class ValueDate(val value: LocalDate) {
+    override fun toString(): String = value.toString()
+}

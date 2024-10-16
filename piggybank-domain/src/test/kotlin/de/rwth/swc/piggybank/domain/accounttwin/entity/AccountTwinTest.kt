@@ -1,6 +1,6 @@
 package de.rwth.swc.piggybank.domain.accounttwin.entity
 
-import de.rwth.swc.piggybank.domain.util.KSelect.Companion.field
+import de.rwth.swc.piggybank.util.KSelect.Companion.field
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.domain.shared.valueobject.Money
 import io.kotest.matchers.shouldBe

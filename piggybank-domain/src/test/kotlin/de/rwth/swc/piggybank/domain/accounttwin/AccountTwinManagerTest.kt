@@ -7,7 +7,7 @@ import de.rwth.swc.piggybank.domain.accounttwin.spi.Accounts
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.domain.shared.valueobject.Money
 import de.rwth.swc.piggybank.domain.shared.valueobject.MoneyAmount
-import de.rwth.swc.piggybank.domain.util.CURRENCY_SUPPLIER
+import de.rwth.swc.piggybank.util.CURRENCY_SUPPLIER
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
