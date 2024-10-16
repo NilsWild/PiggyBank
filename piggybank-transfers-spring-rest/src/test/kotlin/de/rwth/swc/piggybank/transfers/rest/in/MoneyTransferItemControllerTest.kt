@@ -3,6 +3,7 @@ package de.rwth.swc.piggybank.transfers.rest.`in`
 import de.interact.domain.rest.RestMessage
 import de.interact.junit.jupiter.annotation.InterACtTest
 import de.interact.rest.TestRestClient
+import de.interact.test.inherently
 import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
 import de.rwth.swc.piggybank.domain.transfers.api.AccountWatchService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
@@ -80,20 +81,20 @@ class MoneyTransferItemControllerTest {
             it.bodyToMono<String>()
         }.block()
 
-        moneyTransferItems.getAll() shouldContainExactly listOf(moneyTransferItem)
-        moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly listOf(
-            moneyTransferItem
-        )
-        moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly listOf(
-            moneyTransferItem
-        )
-
-        mockServer.verify(
-            HttpRequest.request()
-                .withMethod("POST")
-                .withPath(accountServiceResponse.path)
-        )
-
+        inherently {
+            moneyTransferItems.getAll() shouldContainExactly listOf(moneyTransferItem)
+            moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly listOf(
+                moneyTransferItem
+            )
+            moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly listOf(
+                moneyTransferItem
+            )
+            mockServer.verify(
+                HttpRequest.request()
+                    .withMethod("POST")
+                    .withPath(accountServiceResponse.path)
+            )
+        }
     }
 
     @InterACtTest
@@ -116,11 +117,12 @@ class MoneyTransferItemControllerTest {
             it.bodyToMono<String>()
         }.block()
 
-        moneyTransferItems.getAll() shouldContainExactly emptyList()
-        moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly emptyList()
-        moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly emptyList()
-
-        mockServer.verifyZeroInteractions()
+        inherently {
+            moneyTransferItems.getAll() shouldContainExactly emptyList()
+            moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly emptyList()
+            moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly emptyList()
+            mockServer.verifyZeroInteractions()
+        }
     }
 
     fun moneyTransfer(): Stream<Arguments> {
