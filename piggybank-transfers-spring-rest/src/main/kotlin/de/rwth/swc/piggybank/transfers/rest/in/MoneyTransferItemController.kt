@@ -2,6 +2,8 @@ package de.rwth.swc.piggybank.transfers.rest.`in`
 
 import de.rwth.swc.piggybank.domain.transfers.api.MoneyTransferItemService
 import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
+import de.rwth.swc.piggybank.transfers.rest.`in`.dto.MoneyTransferDto
+import de.rwth.swc.piggybank.transfers.rest.`in`.mapping.MoneyTransferDtoMapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/transfers")
-class MoneyTransferItemController(private val moneyTransferItemService: MoneyTransferItemService) {
+class MoneyTransferItemController(
+    private val moneyTransferItemService: MoneyTransferItemService,
+    private val moneyTransferMapper: MoneyTransferDtoMapper) {
 
     /**
      * Endpoint to create a new money transfer item.
@@ -22,8 +26,8 @@ class MoneyTransferItemController(private val moneyTransferItemService: MoneyTra
      * @param moneyTransferItem The money transfer item to be created.
      */
     @PostMapping
-    fun createMoneyTransferItem(@RequestBody moneyTransferItem: MoneyTransferItem) {
-        moneyTransferItemService.add(moneyTransferItem)
+    fun createMoneyTransferItem(@RequestBody moneyTransfer: MoneyTransferDto) {
+        moneyTransferItemService.add(moneyTransferMapper.toDomain(moneyTransfer))
     }
 
 }

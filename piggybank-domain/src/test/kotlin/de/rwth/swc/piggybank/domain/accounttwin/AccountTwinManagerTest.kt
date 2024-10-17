@@ -46,7 +46,7 @@ class AccountTwinManagerTest {
     @Test
     fun `handleTransfer should subtract from source account and add to target account`() {
         // Given
-        val currency = CURRENCY_SUPPLIER.create()
+        val currency = Instancio.of(CURRENCY_SUPPLIER).create()
         val accountTwinManager = AccountTwinManager(accounts)
         val transfer = Instancio.of(Transfer::class.java).supply(
             all(Currency::class.java), Supplier { currency }
@@ -74,7 +74,7 @@ class AccountTwinManagerTest {
     @Test
     fun `handleTransfer should not subtract from source account if it does not exist`() {
         // Given
-        val currency = CURRENCY_SUPPLIER.create()
+        val currency = Instancio.of(CURRENCY_SUPPLIER).create()
         val accountTwinManager = AccountTwinManager(accounts)
         val transfer = Instancio.of(Transfer::class.java).supply(
             all(Currency::class.java), Supplier { currency }
@@ -98,7 +98,7 @@ class AccountTwinManagerTest {
     @Test
     fun `handleTransfer should not add to target account if it does not exist`() {
         // Given
-        val currency = CURRENCY_SUPPLIER.create()
+        val currency = Instancio.of(CURRENCY_SUPPLIER).create()
         val accountTwinManager = AccountTwinManager(accounts)
         val transfer = Instancio.of(Transfer::class.java).supply(
             all(Currency::class.java), Supplier { currency }

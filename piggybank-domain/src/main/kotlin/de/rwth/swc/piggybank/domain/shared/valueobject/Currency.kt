@@ -11,12 +11,12 @@ data class Currency(
     val name: CurrencyName,
     val symbol: CurrencySymbol,
     val decimalPlaces: DecimalPlaces,
-    val isoCode: ISOCode
+    val isoCode: CurrencyISOCode
 ) {
     companion object {
-        val EUR = Currency(CurrencyName("Euro"), CurrencySymbol("€"), DecimalPlaces(2), ISOCode("EUR"))
-        val USD = Currency(CurrencyName("US Dollar"), CurrencySymbol("$"), DecimalPlaces(2), ISOCode("USD"))
-        val GBP = Currency(CurrencyName("British Pound"), CurrencySymbol("£"), DecimalPlaces(2), ISOCode("GBP"))
+        val EUR = Currency(CurrencyName("Euro"), CurrencySymbol("€"), DecimalPlaces(2), CurrencyISOCode("EUR"))
+        val USD = Currency(CurrencyName("US Dollar"), CurrencySymbol("$"), DecimalPlaces(2), CurrencyISOCode("USD"))
+        val GBP = Currency(CurrencyName("British Pound"), CurrencySymbol("£"), DecimalPlaces(2), CurrencyISOCode("GBP"))
 
         /**
          * Factory method to create a Currency instance from simple types.
@@ -28,7 +28,23 @@ data class Currency(
          * @return A new instance of Currency.
          */
         fun from(name: String, symbol: String, decimalPlaces: Int, isoCode: String): Currency {
-            return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces), ISOCode(isoCode))
+            return Currency(CurrencyName(name), CurrencySymbol(symbol), DecimalPlaces(decimalPlaces), CurrencyISOCode(isoCode))
+        }
+
+        /**
+         * Factory method to get a Currency by ISO code
+         *
+         * @param isoCode The iso code of the currency
+         */
+        fun fromISOCode(isoCode: CurrencyISOCode): Currency {
+            return Currency::class.java.declaredFields
+                .filter { it.type == Currency::class.java }  // Ensure the field is of type Currency
+                .mapNotNull {
+                    it.isAccessible = true
+                    it.get(null) as Currency
+                }
+                .firstOrNull { it.isoCode == isoCode }
+                ?: throw IllegalArgumentException("Invalid currency code: $isoCode")
         }
 
         /**
@@ -37,14 +53,7 @@ data class Currency(
          * @param isoCode The iso code of the currency
          */
         fun fromISOCode(isoCode: String): Currency {
-            return Currency::class.java.declaredFields
-                .filter { it.type == Currency::class.java }  // Ensure the field is of type Currency
-                .mapNotNull {
-                    it.isAccessible = true
-                    it.get(null) as Currency
-                }
-                .firstOrNull { it.isoCode.value == isoCode }
-                ?: throw IllegalArgumentException("Invalid currency code: $isoCode")
+            return fromISOCode(CurrencyISOCode(isoCode))
         }
     }
 }
@@ -103,7 +112,7 @@ value class DecimalPlaces(val value: Int) {
  * @property value The ISO code of a currency
  */
 @JvmInline
-value class ISOCode(val value: String) {
+value class CurrencyISOCode(val value: String) {
     init {
         require(value.length == 3) { "ISO code must have 3 characters" }
     }

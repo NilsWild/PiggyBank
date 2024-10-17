@@ -6,6 +6,6 @@ import de.rwth.swc.piggybank.domain.shared.valueobject.Currency.Companion.USD
 import org.instancio.Instancio
 import org.instancio.Select
 
-val CURRENCY_SUPPLIER = Instancio.of(Currency::class.java).supply(Select.root(), { random ->
-    listOf(EUR, USD)[random.intRange(0,1)]
-})
+val CURRENCY_SUPPLIER = Instancio.of(Currency::class.java).supply(Select.root()) { random ->
+    listOf(EUR, USD)[random.intRange(0, 1)]
+}.toModel()

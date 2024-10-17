@@ -4,14 +4,16 @@ import de.interact.domain.rest.RestMessage
 import de.interact.junit.jupiter.annotation.InterACtTest
 import de.interact.rest.TestRestClient
 import de.interact.test.inherently
-import de.rwth.swc.piggybank.domain.shared.valueobject.Currency
+import de.rwth.swc.piggybank.domain.shared.valueobject.Currency.Companion.EUR
+import de.rwth.swc.piggybank.domain.shared.valueobject.Currency.Companion.USD
+import de.rwth.swc.piggybank.domain.shared.valueobject.CurrencyISOCode
 import de.rwth.swc.piggybank.domain.transfers.api.AccountWatchService
-import de.rwth.swc.piggybank.domain.transfers.entity.MoneyTransferItem
 import de.rwth.swc.piggybank.domain.transfers.spi.MoneyTransferItems
-import de.rwth.swc.piggybank.util.CURRENCY_SUPPLIER
+import de.rwth.swc.piggybank.transfers.rest.`in`.dto.MoneyTransferDto
+import de.rwth.swc.piggybank.transfers.rest.`in`.mapping.MoneyTransferDtoMapper
+import de.rwth.swc.piggybank.util.KSelect.Companion.field
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import jakarta.transaction.Transactional
 import org.instancio.Instancio
 import org.instancio.Select.all
 import org.junit.jupiter.api.BeforeEach
@@ -29,7 +31,6 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import java.util.function.Supplier
 import java.util.stream.Stream
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,6 +53,9 @@ class MoneyTransferItemControllerTest {
     @Autowired
     lateinit var accountWatchService: AccountWatchService
 
+    @Autowired
+    lateinit var moneyTransferMapper: MoneyTransferDtoMapper
+
     private lateinit var testClient: TestRestClient
 
     @BeforeEach
@@ -62,10 +66,10 @@ class MoneyTransferItemControllerTest {
 
     @InterACtTest
     @MethodSource("moneyTransfer")
-    fun `add money transfer item to watched account should call account service`(stimulus: RestMessage.Request<MoneyTransferItem>, accountServiceResponse: RestMessage.Response<String>) {
+    fun `add money transfer item to watched account should call account service`(stimulus: RestMessage.Request<MoneyTransferDto>, accountServiceResponse: RestMessage.Response<String>) {
 
-        val moneyTransferItem = stimulus.body!!
-        accountWatchService.addWatchedAccount(moneyTransferItem.target)
+        val moneyTransferDto = stimulus.body!!
+        accountWatchService.addWatchedAccount(moneyTransferDto.target)
 
         mockServer.`when`(
             HttpRequest.request()
@@ -81,13 +85,15 @@ class MoneyTransferItemControllerTest {
             it.bodyToMono<String>()
         }.block()
 
+        val mappedMoneyTransferDto = moneyTransferMapper.toDomain(moneyTransferDto)
+
         inherently {
-            moneyTransferItems.getAll() shouldContainExactly listOf(moneyTransferItem)
-            moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly listOf(
-                moneyTransferItem
+            moneyTransferItems.getAll() shouldContainExactly listOf(mappedMoneyTransferDto)
+            moneyTransferItems.getAllTransferredToTarget(moneyTransferDto.target) shouldContainExactly listOf(
+                mappedMoneyTransferDto
             )
-            moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly listOf(
-                moneyTransferItem
+            moneyTransferItems.getAllReceivedFromSource(moneyTransferDto.source) shouldContainExactly listOf(
+                mappedMoneyTransferDto
             )
             mockServer.verify(
                 HttpRequest.request()
@@ -99,9 +105,9 @@ class MoneyTransferItemControllerTest {
 
     @InterACtTest
     @MethodSource("moneyTransfer")
-    fun `add money transfer item to non watched account should not call account service`(stimulus: RestMessage.Request<MoneyTransferItem>, accountServiceResponse: RestMessage.Response<String>) {
+    fun `add money transfer item to non watched account should not call account service`(stimulus: RestMessage.Request<MoneyTransferDto>, accountServiceResponse: RestMessage.Response<String>) {
 
-        val moneyTransferItem = stimulus.body!!
+        val moneyTransferDto = stimulus.body!!
 
         mockServer.`when`(
             HttpRequest.request()
@@ -119,16 +125,16 @@ class MoneyTransferItemControllerTest {
 
         inherently {
             moneyTransferItems.getAll() shouldContainExactly emptyList()
-            moneyTransferItems.getAllTransferredToTarget(moneyTransferItem.target) shouldContainExactly emptyList()
-            moneyTransferItems.getAllReceivedFromSource(moneyTransferItem.source) shouldContainExactly emptyList()
+            moneyTransferItems.getAllTransferredToTarget(moneyTransferDto.target) shouldContainExactly emptyList()
+            moneyTransferItems.getAllReceivedFromSource(moneyTransferDto.source) shouldContainExactly emptyList()
             mockServer.verifyZeroInteractions()
         }
     }
 
     fun moneyTransfer(): Stream<Arguments> {
-        val moneyTransferItem = Instancio.of(MoneyTransferItem::class.java).supply(
-            all(Currency::class.java), Supplier { CURRENCY_SUPPLIER.create() }
-        ).create()
+        val moneyTransferItem = Instancio.of(MoneyTransferDto::class.java).supply(
+            field(MoneyTransferDto::currencyIsoCode)
+        ) { random -> random.oneOf(EUR.isoCode.value, USD.isoCode.value) }.create()
 
         val stimulus = RestMessage.Request(
             "/api/transfers",
