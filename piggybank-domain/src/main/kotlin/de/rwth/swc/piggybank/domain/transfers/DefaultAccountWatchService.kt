@@ -12,6 +12,10 @@ import java.util.*
  */
 class DefaultAccountWatchService(private val watches: AccountWatches) : AccountWatchService {
     override fun addWatchedAccount(accountReference: AccountReference): AccountWatch {
+        val existingWatch = watches.findForAccount(accountReference)
+        if(existingWatch != null) {
+            return existingWatch
+        }
         val watch = AccountWatch(AccountWatchId(UUID.randomUUID()), accountReference)
         return watches.save(watch)
     }
