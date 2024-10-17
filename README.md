@@ -9,6 +9,9 @@ The project is structured into the following sub-domains:
     It then notifies all the listeners that are interested in the transfer event.
 - **accounttwin**: manages the accounts and their balances. It takes the transfer events and uses 
     them to update the balances of the accounts.
+- **transferclassification**: classifies the transfers into different categories. It uses the transfer events
+    to classify the transfers.
+- **moneyconversion**: converts the money from one currency to another.
 
 ## Spring
 The project uses Spring Boot to provide WebServices. The SPIs of the Domain are implemented as Spring Components and
